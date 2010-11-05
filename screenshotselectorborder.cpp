@@ -16,6 +16,7 @@ ScreenshotSelectorBorder::ScreenshotSelectorBorder()
 ScreenshotSelectorBorder::ScreenshotSelectorBorder(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent)
     : QGraphicsRectItem(x, y, w, h, parent), top_left(new ResizeHandle()), bottom_right(new ResizeHandle())
 {
+    // Setting some flags, hurr durr
     setFlag(ItemIsMovable);
     setCacheMode(DeviceCoordinateCache);
     setCursor(Qt::PointingHandCursor);
