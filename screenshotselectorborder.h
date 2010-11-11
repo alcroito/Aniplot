@@ -18,6 +18,7 @@ protected:
 
 private:
     ResizeHandle* top_left;
+    ResizeHandle* top_middle;
     ResizeHandle* bottom_right;
 
 };
