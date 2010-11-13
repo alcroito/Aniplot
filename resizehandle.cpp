@@ -34,57 +34,58 @@ bool ResizeHandle::numberIsWithinLimit(qreal number, qreal limit, qreal delta) {
 void ResizeHandle::mouseMoveEvent ( QGraphicsSceneMouseEvent * event ) {
     QPointF curr = event->scenePos();
     rect =static_cast<ScreenshotSelectorBorder*> (this->parentItem())->rect();
-    qint32 size;
+    qreal size_x;
+    qreal size_y;
 
     // Center
     if ((numberIsWithinLimit(prev.x(), rect.width() / 2 + rect.x(), 25))) {
-	size = curr.y() - prev.y();
+	size_y = curr.y() - prev.y();
 	// Top
 	if (prev.y() < rect.height() / 2 + rect.y()) {
-	    rect.setY(curr.y() + size);
+	    rect.setY(curr.y() + size_y);
 	}
 	// Bottom
 	else {
-	    rect.setHeight(rect.height() + size);
+	    rect.setHeight(rect.height() + size_y);
 	}
     }
     // Left
     else if (prev.x() < rect.width() / 2  + rect.x()) {
 	// Not Middle
 	if (!numberIsWithinLimit(prev.y(), rect.height() / 2 + rect.y(), 25)) {
-	    size = curr.y() - prev.y();
+	    size_y = curr.y() - prev.y();
 	    // Top
 	    if (prev.y() < rect.height() / 2 + rect.y()) {
-		rect.setY(rect.y() + size);
+		rect.setY(rect.y() + size_y);
 	    // Bottom
 	    } else {
-		rect.setHeight(rect.height() + size);
+		rect.setHeight(rect.height() + size_y);
 	    }
 	}
-	size = curr.x() - prev.x();
-	rect.setX(rect.x() + size);
+	size_x = curr.x() - prev.x();
+	rect.setX(rect.x() + size_x);
     }
     // Right
     else if (prev.x() > rect.width() / 2 + rect.x()) {
 	// Not Middle
 	if (!numberIsWithinLimit(prev.y(), rect.height() / 2 + rect.y(), 25)) {
-	    size = curr.y() - prev.y();
+	    size_y = curr.y() - prev.y();
 	    // Top
 	    if (prev.y() < rect.height() / 2 + rect.y()) {
-		rect.setY(rect.y() + size);
+		rect.setY(rect.y() + size_y);
 	    }
 	    // Bottom
 	    else {
-		rect.setHeight(rect.height() + size);
+		rect.setHeight(rect.height() + size_y);
 	    }
 	}
-	size = curr.x() - prev.x();
-	rect.setWidth(rect.width() + size);
+	size_x = curr.x() - prev.x();
+	rect.setWidth(rect.width() + size_x);
     }
 
     static_cast<ScreenshotSelectorBorder*> (this->parentItem())->setRect(rect);
     prev = event->scenePos();
-    //setPos();
+    setPos(x() + size_x, y() + size_y);
 
     QGraphicsItem::mouseMoveEvent(event);
 
