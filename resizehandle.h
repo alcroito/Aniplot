@@ -18,6 +18,8 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
 private:
+    bool numberIsWithinLimit(qreal number, qreal limit, qreal delta);
+
     QPointF prev;
     QRectF rect;
 

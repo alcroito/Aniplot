@@ -24,53 +24,68 @@ void ResizeHandle::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->drawEllipse(-5, -5, 10, 10);
 }
 
+bool ResizeHandle::numberIsWithinLimit(qreal number, qreal limit, qreal delta) {
+    if ((number < (limit + delta)) && (number > (limit - delta)))
+	return true;
+    else
+	return false;
+}
 
 void ResizeHandle::mouseMoveEvent ( QGraphicsSceneMouseEvent * event ) {
     QPointF curr = event->scenePos();
-    rect = mapRectToScene(static_cast<ScreenshotSelectorBorder*> (this->parentItem())->rect());
+    rect =static_cast<ScreenshotSelectorBorder*> (this->parentItem())->rect();
     qint32 size;
 
-    if (prev.x() < (rect.width() + rect.x()) / 2) { //left
-	if (prev.y() != (rect.height() + rect.y()) / 2 ) { //not middle
+    // Center
+    if ((numberIsWithinLimit(prev.x(), rect.width() / 2 + rect.x(), 25))) {
+	size = curr.y() - prev.y();
+	// Top
+	if (prev.y() < rect.height() / 2 + rect.y()) {
+	    rect.setY(curr.y() + size);
+	}
+	// Bottom
+	else {
+	    rect.setHeight(rect.height() + size);
+	}
+    }
+    // Left
+    else if (prev.x() < rect.width() / 2  + rect.x()) {
+	// Not Middle
+	if (!numberIsWithinLimit(prev.y(), rect.height() / 2 + rect.y(), 25)) {
 	    size = curr.y() - prev.y();
-	    if (prev.y() > (rect.height() + rect.y()) /2) { //bottom
-		size = -size;
+	    // Top
+	    if (prev.y() < rect.height() / 2 + rect.y()) {
+		rect.setY(rect.y() + size);
+	    // Bottom
+	    } else {
+		rect.setHeight(rect.height() + size);
 	    }
-	    rect.setY(rect.y() + size);
-	    //rect.setHeight(rect.height() + size);
 	}
 	size = curr.x() - prev.x();
 	rect.setX(rect.x() + size);
-	//rect.setWidth(rect.width() + size);
     }
-    else if (prev.x() > (rect.width() + rect.x()) / 2) //right <=====
-    {
-	if (prev.y() != (rect.height() + rect.y()) / 2) // not middle
-	{
-	    size = prev.y() - curr.y();
-	    if (prev.y() > (rect.height() + rect.y()) / 2) //bottom
-		size = -size;
-	    else
-		curr.setY(curr.y() + size);
-	    rect.setHeight(rect.height() + size);
+    // Right
+    else if (prev.x() > rect.width() / 2 + rect.x()) {
+	// Not Middle
+	if (!numberIsWithinLimit(prev.y(), rect.height() / 2 + rect.y(), 25)) {
+	    size = curr.y() - prev.y();
+	    // Top
+	    if (prev.y() < rect.height() / 2 + rect.y()) {
+		rect.setY(rect.y() + size);
+	    }
+	    // Bottom
+	    else {
+		rect.setHeight(rect.height() + size);
+	    }
 	}
 	size = curr.x() - prev.x();
 	rect.setWidth(rect.width() + size);
     }
-    //else if (prev.x() == (rect.width() + rect.x()) / 2) // center
-    else // center
-    {
 
-	size = prev.y() - curr.y(); // <======
-	if (prev.y() > (rect.height() + rect.y()) / 2) // bottom
-	    size = -size;
-	else
-	    curr.setY(curr.y() + size);
-	//rect.setHeight(rect.height() + size);
-    }
-
-    static_cast<ScreenshotSelectorBorder*> (this->parentItem())->setRect(mapRectFromScene(rect));
+    static_cast<ScreenshotSelectorBorder*> (this->parentItem())->setRect(rect);
     prev = event->scenePos();
+    //setPos();
+
     QGraphicsItem::mouseMoveEvent(event);
 
 }
