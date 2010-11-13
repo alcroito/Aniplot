@@ -9,7 +9,7 @@ class ResizeHandle;
 class ScreenshotSelectorBorder : public QGraphicsRectItem
 {
 public:
-    ScreenshotSelectorBorder();
+    //ScreenshotSelectorBorder();
     ScreenshotSelectorBorder(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = 0);
 
 protected:
@@ -19,6 +19,11 @@ protected:
 private:
     ResizeHandle* top_left;
     ResizeHandle* top_middle;
+    ResizeHandle* top_right;
+    ResizeHandle* center_left;
+    ResizeHandle* center_right;
+    ResizeHandle* bottom_left;
+    ResizeHandle* bottom_middle;
     ResizeHandle* bottom_right;
 
 };
