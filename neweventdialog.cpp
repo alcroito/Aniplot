@@ -43,7 +43,6 @@ void NewEventDialog::on_stopButton_clicked()
 void NewEventDialog::changeCurrentTimePlayback(qint64 time) {
     QTime displayTime((time / (60000 * 60)) % 24, (time / 60000) % 60, (time / 1000) % 60);
     ui->currentTime->setText(displayTime.toString("hh:mm:ss"));
-
 }
 
 void NewEventDialog::on_closeButton_clicked()
