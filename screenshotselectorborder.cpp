@@ -5,14 +5,6 @@
 #include "screenshotselectorborder.h"
 #include "resizehandle.h"
 
-
-//ScreenshotSelectorBorder::ScreenshotSelectorBorder()
-//{
-//    setFlag(ItemIsMovable);
-//    setCacheMode(DeviceCoordinateCache);
-//    setCursor(Qt::PointingHandCursor);
-//}
-
 ScreenshotSelectorBorder::ScreenshotSelectorBorder(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent)
     : QGraphicsRectItem(x, y, w, h, parent),
     top_left(new ResizeHandle()), top_middle(new ResizeHandle()), top_right(new ResizeHandle()),
@@ -66,15 +58,16 @@ ScreenshotSelectorBorder::ScreenshotSelectorBorder(qreal x, qreal y, qreal w, qr
     bottom_right->setZValue(10);
     bottom_right->setPrev(bottom_right->scenePos());
 
-
+    connect(this, SIGNAL(resized(QRectF, QRectF)), top_left, SLOT(reposition(QRectF, QRectF)));
+    connect(this, SIGNAL(resized(QRectF, QRectF)), top_middle, SLOT(reposition(QRectF, QRectF)));
+    connect(this, SIGNAL(resized(QRectF, QRectF)), top_right, SLOT(reposition(QRectF, QRectF)));
+    connect(this, SIGNAL(resized(QRectF, QRectF)), center_left, SLOT(reposition(QRectF, QRectF)));
+    connect(this, SIGNAL(resized(QRectF, QRectF)), center_right, SLOT(reposition(QRectF, QRectF)));
+    connect(this, SIGNAL(resized(QRectF, QRectF)), bottom_left, SLOT(reposition(QRectF, QRectF)));
+    connect(this, SIGNAL(resized(QRectF, QRectF)), bottom_middle, SLOT(reposition(QRectF, QRectF)));
+    connect(this, SIGNAL(resized(QRectF, QRectF)), bottom_right, SLOT(reposition(QRectF, QRectF)));
 }
 
-void ScreenshotSelectorBorder::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    QGraphicsItem::mousePressEvent(event);
-}
-
-void ScreenshotSelectorBorder::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    QGraphicsItem::mouseReleaseEvent(event);
+void ScreenshotSelectorBorder::emitResized(QRectF new_rect, QRectF old_rect) {
+    emit resized(new_rect, old_rect);
 }

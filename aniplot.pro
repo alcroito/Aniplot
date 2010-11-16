@@ -11,7 +11,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        aniwindow.cpp \
+    aniwindow.cpp \
     event.cpp \
     aniscene.cpp \
     neweventdialog.cpp \

@@ -2,20 +2,21 @@
 #define SCREENSHOTSELECTORBORDER_H
 
 #include <QGraphicsRectItem>
+#include <QObject>
 
 class QGraphicsSceneMouseEvent;
 class ResizeHandle;
 
-class ScreenshotSelectorBorder : public QGraphicsRectItem
+class ScreenshotSelectorBorder : public QObject, public QGraphicsRectItem
 {
+    Q_OBJECT
 public:
-    //ScreenshotSelectorBorder();
     ScreenshotSelectorBorder(qreal x, qreal y, qreal w, qreal h, QGraphicsItem *parent = 0);
 
-protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void emitResized(QRectF new_rect, QRectF old_rect);
 
+signals:
+    void resized(QRectF new_rect, QRectF old_rect);
 private:
     ResizeHandle* top_left;
     ResizeHandle* top_middle;

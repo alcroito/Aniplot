@@ -2,9 +2,12 @@
 #define RESIZEHANDLE_H
 
 #include <QGraphicsItem>
+#include <QObject>
 
-class ResizeHandle : public QGraphicsItem
+class ResizeHandle : public QObject, public QGraphicsItem
 {
+    Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
 public:
     ResizeHandle();
 
@@ -12,9 +15,11 @@ public:
     QPainterPath shape() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void setPrev(QPointF val);
+
+public slots:
+    void reposition(QRectF new_rect, QRectF old_rect);
+
 protected:
-    //void mousePressEvent(QGraphicsSceneMouseEvent *event);
-   // void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
 private:

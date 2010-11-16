@@ -1,5 +1,6 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
+#include <QDebug>
 #include "resizehandle.h"
 #include "screenshotselectorborder.h"
 
@@ -33,7 +34,8 @@ bool ResizeHandle::numberIsWithinLimit(qreal number, qreal limit, qreal delta) {
 
 void ResizeHandle::mouseMoveEvent ( QGraphicsSceneMouseEvent * event ) {
     QPointF curr = event->scenePos();
-    rect =static_cast<ScreenshotSelectorBorder*> (this->parentItem())->rect();
+    rect = static_cast<ScreenshotSelectorBorder*> (this->parentItem())->rect();
+    QRectF old_rect = rect;
     qreal size_x;
     qreal size_y;
 
@@ -87,7 +89,13 @@ void ResizeHandle::mouseMoveEvent ( QGraphicsSceneMouseEvent * event ) {
     prev = event->scenePos();
     setPos(x() + size_x, y() + size_y);
 
+    static_cast<ScreenshotSelectorBorder*> (this->parentItem())->emitResized(rect, old_rect);
+
     QGraphicsItem::mouseMoveEvent(event);
+}
+
+void ResizeHandle::reposition(QRectF new_rect, QRectF old_rect) {
+    qDebug() << "New:" << new_rect << " Old:" << old_rect;
 
 }
 
