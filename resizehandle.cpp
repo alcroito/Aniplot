@@ -89,14 +89,64 @@ void ResizeHandle::mouseMoveEvent ( QGraphicsSceneMouseEvent * event ) {
     prev = event->scenePos();
     setPos(x() + size_x, y() + size_y);
 
+    qDebug() << "New:" << rect << " Old:" << old_rect;
     static_cast<ScreenshotSelectorBorder*> (this->parentItem())->emitResized(rect, old_rect);
 
     QGraphicsItem::mouseMoveEvent(event);
 }
 
 void ResizeHandle::reposition(QRectF new_rect, QRectF old_rect) {
-    qDebug() << "New:" << new_rect << " Old:" << old_rect;
+    QPointF curr = this->scenePos();
+    qreal x = new_rect.x();
+    qreal y = new_rect.y();
+    qreal w = new_rect.width();
+    qreal h = new_rect.height();
 
+    // Middle
+    if ((numberIsWithinLimit(curr.x(), old_rect.width() / 2 + old_rect.x(), 25))) {
+	// Top
+	if (curr.y() < old_rect.height() / 2 + old_rect.y()) {
+	    this->setPos(x + w/2, y);
+	}
+	// Bottom
+	else {
+	    this->setPos(x + w/2, y + h);
+	}
+    }
+    // Left
+    else if (curr.x() < old_rect.width() / 2  + old_rect.x()) {
+	// Not Center
+	if (!numberIsWithinLimit(curr.y(), old_rect.height() / 2 + old_rect.y(), 25)) {
+	    // Top
+	    if (curr.y() < old_rect.height() / 2 + old_rect.y()) {
+		this->setPos(x, y);
+	    // Bottom
+	    } else {
+		this->setPos(x, y + h);
+	    }
+	// Center
+	} else {
+	    this->setPos(x, y + h/2);
+	}
+
+    }
+    // Right
+    else if (curr.x() > old_rect.width() / 2 + old_rect.x()) {
+	// Not Center
+	if (!numberIsWithinLimit(curr.y(), old_rect.height() / 2 + old_rect.y(), 25)) {
+	    // Top
+	    if (curr.y() < old_rect.height() / 2 + old_rect.y()) {
+		this->setPos(x + w, y);
+	    }
+	    // Bottom
+	    else {
+		this->setPos(x + w, y + h);
+	    }
+	// Center
+	} else {
+	    this->setPos(x + w, y + h/2);
+	}
+    }
 }
 
 void ResizeHandle::setPrev(QPointF val) {
